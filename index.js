@@ -58,6 +58,10 @@ function tambahBelanjaan() {
       if (namaBarang.includes("_")) break;
       const jumlahBarang = prompt(`Masukkan jumlah barang ke - ${indexBarang}: `);
       const jumlahBarangNum = Number(jumlahBarang);
+      if (isNaN(jumlahBarangNum)) {
+        console.log("Jumlah barang tidak valid!");
+        return;
+      }
       if (jumlahBarang.includes("_")) break;
       shoppingList.push({
         kategori: categories[indexKategori - 1].nama,
@@ -103,6 +107,24 @@ function hapusBelanjaan() {
   }
 }
 
+function hitungTotalBelanjaan() {
+  let totalHarga = 0;
+  console.log("Berikut adalah daftar belanjaan:");
+  for (let index = 0; index < shoppingList.length; index++) {
+    const item = shoppingList[index];
+    console.log(`${index + 1}. ${item.nama} - ${item.jumlah} ${item.kategori.toLowerCase()}`);
+    const harga = Number(prompt(`Masukkan harga beli: `));
+    if (isNaN(harga)) {
+      console.log("Harga beli tidak valid!");
+      return;
+    }
+    const subTotal = harga * item.jumlah;
+    totalHarga += subTotal;
+    console.log(`Sub total harga belanjaan adalah Rp ${subTotal}`);
+  }
+  console.log(`Total harga belanjaan adalah Rp ${totalHarga}`);
+}
+
 let pilihan = "";
 while (pilihan !== "8") {
   console.log("\n======================");
@@ -140,6 +162,9 @@ while (pilihan !== "8") {
       break;
     case "6":
       hapusBelanjaan();
+      break;
+    case "7":
+      hitungTotalBelanjaan();
       break;
     default:
       if (pilihan !== "8") {
