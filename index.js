@@ -1,6 +1,7 @@
 const prompt = require("prompt-sync")();
 
 let categories = [];
+let shoppingList = [];
 
 function tambahKategori(namaKategori, kataKunci) {
   categories.push({ nama: namaKategori, kataKunci: kataKunci });
@@ -8,9 +9,7 @@ function tambahKategori(namaKategori, kataKunci) {
 }
 
 function cariKategori(namaKategori) {
-  const foundCategory = categories.find(
-    (category) => category.nama.toLowerCase() === namaKategori.toLowerCase(),
-  );
+  const foundCategory = categories.find((category) => category.kataKunci.toLowerCase() === namaKategori.toLowerCase());
   if (!foundCategory) {
     console.log("Kategori tidak ditemukan!");
     return;
@@ -28,14 +27,80 @@ function hapusKategori() {
   categories.forEach((category, index) => {
     console.log(`${index + 1}. ${category.nama}`);
   });
-  const index =
-    prompt(`Pilih Kategori yang akan dihapus [1-${categories.length}]: `) - 1;
+  const index = prompt(`Pilih Kategori yang akan dihapus [1-${categories.length}]: `) - 1;
   if (index >= 0 && index < categories.length) {
     categories.splice(index, 1);
     console.log("Kategori berhasil dihapus!");
     return;
   }
   console.log("Pilihan kategori tidak valid!");
+}
+
+function tambahBelanjaan() {
+  if (!categories.length) {
+    console.log("Daftar kategori tidak tersedia. Tambahkan kategori terlebih dahulu!");
+    return;
+  }
+  console.log("Daftar Kategori Tersedia:");
+  categories.forEach((category, index) => {
+    console.log(`${index + 1}. ${category.nama}`);
+  });
+  console.log("Tambahkan rencana daftar belanja. Tekan underscore untuk menghentikan penambahan");
+
+  let indexBarang = 1;
+  const maxBarang = 10;
+  while (indexBarang <= maxBarang) {
+    const kategori = prompt(`Kategori Barang ke - ${indexBarang} [1-${categories.length}]: `);
+    if (kategori.includes("_")) break;
+    const indexKategori = Number(kategori);
+    if (indexKategori >= 1 && indexKategori <= categories.length) {
+      const namaBarang = prompt(`Nama Barang ke - ${indexBarang}: `);
+      if (namaBarang.includes("_")) break;
+      const jumlahBarang = prompt(`Masukkan jumlah barang ke - ${indexBarang}: `);
+      const jumlahBarangNum = Number(jumlahBarang);
+      if (jumlahBarang.includes("_")) break;
+      shoppingList.push({
+        kategori: categories[indexKategori - 1].nama,
+        nama: namaBarang,
+        jumlah: jumlahBarangNum,
+      });
+    } else {
+      console.log("Pilihan kategori tidak valid!");
+      return;
+    }
+    indexBarang++;
+  }
+  console.log("Daftar belanja berhasil ditambahkan!");
+}
+
+function cariBelanjaan(namaBarang) {
+  const foundItem = shoppingList.find((item) => item.nama.toLowerCase() === namaBarang.toLowerCase());
+  if (!foundItem) {
+    console.log("Belanjaan tidak ditemukan!");
+    return;
+  }
+  console.log(`Belanjaan ditemukan!`);
+  console.log(`Nama Barang: ${foundItem.nama}`);
+  console.log(`Jumlah Barang: ${foundItem.jumlah}`);
+  console.log(`Kategori Barang: ${foundItem.kategori}`);
+}
+
+function hapusBelanjaan() {
+  if (!shoppingList.length) {
+    console.log("Daftar belanjaan tidak tersedia!");
+    return;
+  }
+  console.log("Daftar Belanjaan:");
+  shoppingList.forEach((item, index) => {
+    console.log(`${index + 1}. ${item.nama}`);
+  });
+  const index = Number(prompt(`Pilih Barang yang akan dihapus [1-${shoppingList.length}]: `)) - 1;
+  if (index >= 0 && index < shoppingList.length) {
+    shoppingList.splice(index, 1);
+    console.log("Barang berhasil dihapus!");
+  } else {
+    console.log("Pilihan barang tidak valid!");
+  }
 }
 
 let pilihan = "";
@@ -66,9 +131,19 @@ while (pilihan !== "8") {
     case "3":
       hapusKategori();
       break;
+    case "4":
+      tambahBelanjaan();
+      break;
+    case "5":
+      const namaBelanjaan = prompt("Masukan nama barang: ");
+      cariBelanjaan(namaBelanjaan);
+      break;
+    case "6":
+      hapusBelanjaan();
+      break;
     default:
       if (pilihan !== "8") {
-        console.log("Pilihan tidak valid, silakan pilih menu yang sesuai.");
+        console.log("Pilihan menu tidak valid! Silakan pilih menu yang sesuai");
       }
       break;
   }
