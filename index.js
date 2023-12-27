@@ -1,4 +1,5 @@
 const prompt = require("prompt-sync")();
+const fs = require("fs");
 
 let categories = [];
 let shoppingList = [];
@@ -57,12 +58,12 @@ function tambahBelanjaan() {
       const namaBarang = prompt(`Nama Barang ke - ${indexBarang}: `);
       if (namaBarang.includes("_")) break;
       const jumlahBarang = prompt(`Masukkan jumlah barang ke - ${indexBarang}: `);
+      if (jumlahBarang.includes("_")) break;
       const jumlahBarangNum = Number(jumlahBarang);
       if (isNaN(jumlahBarangNum)) {
-        console.log("Jumlah barang tidak valid!");
+        console.log(`Jumlah barang ke - ${indexBarang} tidak valid!`);
         return;
       }
-      if (jumlahBarang.includes("_")) break;
       shoppingList.push({
         kategori: categories[indexKategori - 1].nama,
         nama: namaBarang,
@@ -125,6 +126,16 @@ function hitungTotalBelanjaan() {
   console.log(`Total harga belanjaan adalah Rp ${totalHarga}`);
 }
 
+function simpanDataBelanjaan() {
+  const data = {
+    categories,
+    shoppingList,
+  };
+
+  fs.writeFileSync("data.json", JSON.stringify(data, null, 2));
+  console.log("Data berhasil disimpan ke dalam file json!");
+}
+
 let pilihan = "";
 while (pilihan !== "8") {
   console.log("\n======================");
@@ -173,4 +184,5 @@ while (pilihan !== "8") {
       break;
   }
 }
+simpanDataBelanjaan();
 console.log("Terima kasih telah menggunakan program Daftar Belanja!");
