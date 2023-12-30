@@ -10,6 +10,10 @@ function tambahKategori(namaKategori, kataKunci) {
 }
 
 function cariKategori(namaKategori) {
+  if (!categories.length) {
+    console.log("Daftar kategori tidak tersedia!");
+    return;
+  }
   const foundCategory = categories.find((category) => category.kataKunci.toLowerCase() === namaKategori.toLowerCase());
   if (!foundCategory) {
     console.log("Kategori tidak ditemukan!");
@@ -48,37 +52,36 @@ function tambahBelanjaan() {
   });
   console.log("Tambahkan rencana daftar belanja. Tekan underscore untuk menghentikan penambahan");
 
-  let indexBarang = 1;
-  const maxBarang = 10;
-  while (indexBarang <= maxBarang) {
+  for (let indexBarang = 1; indexBarang <= 10; indexBarang++) {
     const kategori = prompt(`Kategori Barang ke - ${indexBarang} [1-${categories.length}]: `);
     if (kategori.includes("_")) break;
     const indexKategori = Number(kategori);
     if (indexKategori >= 1 && indexKategori <= categories.length) {
       const namaBarang = prompt(`Nama Barang ke - ${indexBarang}: `);
-      if (namaBarang.includes("_")) break;
-      const jumlahBarang = prompt(`Masukkan jumlah barang ke - ${indexBarang}: `);
-      if (jumlahBarang.includes("_")) break;
-      const jumlahBarangNum = Number(jumlahBarang);
-      if (isNaN(jumlahBarangNum)) {
+      let jumlahBarang = prompt(`Masukkan jumlah barang ke - ${indexBarang}: `);
+      jumlahBarang = Number(jumlahBarang);
+      if (isNaN(jumlahBarang)) {
         console.log(`Jumlah barang ke - ${indexBarang} tidak valid!`);
         return;
       }
       shoppingList.push({
         kategori: categories[indexKategori - 1].nama,
         nama: namaBarang,
-        jumlah: jumlahBarangNum,
+        jumlah: jumlahBarang,
       });
     } else {
       console.log("Pilihan kategori tidak valid!");
       return;
     }
-    indexBarang++;
   }
   console.log("Daftar belanja berhasil ditambahkan!");
 }
 
 function cariBelanjaan(namaBarang) {
+  if (!shoppingList.length) {
+    console.log("Daftar belanjaan tidak tersedia!");
+    return;
+  }
   const foundItem = shoppingList.find((item) => item.nama.toLowerCase() === namaBarang.toLowerCase());
   if (!foundItem) {
     console.log("Belanjaan tidak ditemukan!");
@@ -120,7 +123,7 @@ function hitungTotalBelanjaan() {
       return;
     }
     const subTotal = harga * item.jumlah;
-    totalHarga += subTotal;
+    totalHarga = totalHarga + subTotal;
     console.log(`Sub total harga belanjaan adalah Rp ${subTotal}`);
   }
   console.log(`Total harga belanjaan adalah Rp ${totalHarga}`);

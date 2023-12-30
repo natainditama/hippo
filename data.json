@@ -1,0 +1,13 @@
+{
+  "categories": [
+    {
+      "nama": "Mobil",
+      "kataKunci": "mobil"
+    },
+    {
+      "nama": "motor",
+      "kataKunci": "motor"
+    }
+  ],
+  "shoppingList": []
+}
